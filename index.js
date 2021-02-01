@@ -1,10 +1,7 @@
 'use strict';
 
-
-let url = 'https://developer.nps.gov/api/v1/parks?parkCode=acad&api_key=0u67CbcuaZCupc6JheYKXccQGremdxq3I815GMfy';
-
 function getPark(searchTerm, maxResults=10) {
-    fetch(`https://api.github.com/users/${searchTerm}/repos`)
+    fetch(`https://developer.nps.gov/api/v1/parks?q=${searchTerm}&limit=${maxResults}&api_key=0u67CbcuaZCupc6JheYKXccQGremdxq3I815GMfy`)
     .then(response => response.json())
     .then(responseJson => {
             displayResults(responseJson);
@@ -14,9 +11,11 @@ function getPark(searchTerm, maxResults=10) {
 
 function displayResults(responseJson) {
     let templateStringList = "";
-    for (let i = 0; i < responseJson.length; i++) {
-        templateStringList += `<p class="result-name">${responseJson[i].name}"</p>
-        <p class="result-url"><a href="${responseJson[i].html_url}">${responseJson[i].html_url}</a></p>`;
+    for (let i = 0; i < responseJson.data.length; i++) {
+        templateStringList += `<p class="result-name">${responseJson.data[i].fullName}</p>
+        <p class="result-url"><a href="${responseJson.data[i].url}">${responseJson.data[i].url}</a></p>
+        <p class="result-description">${responseJson.data[i].description}</p>
+        <hr>`;
     }
     $('.results').html(templateStringList);
     $('.results').removeClass('hidden');
